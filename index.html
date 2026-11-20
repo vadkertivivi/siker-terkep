@@ -1748,7 +1748,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
   pages.push(`<section class="page letter" id="pg-welcome" data-flow>
     <div class="blk"><div class="eyebrow">Köszöntő</div><p class="dear" style="margin-top:14px">Kedves ${esc(firstName)}!</p></div>
     <div class="blk">${CONTENT.welcome.map(p => `<p>${esc(p)}</p>`).join('')}</div>
-    ${(CONTENT.welcomeVideo || DEMO) ? `<div class="videos blk no-pdf">${CONTENT.welcomeVideo ? `<a class="vbtn" href="${esc(CONTENT.welcomeVideo)}" target="_blank" rel="noopener"><svg viewBox="0 0 14 14"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>Vivi köszöntő videója</a>` : '<span class="vbtn off">Vivi köszöntő videója (link később)</span>'}</div>` : ''}
+    ${(CONTENT.welcomeVideo || DEMO) ? `<div class="videos blk">${CONTENT.welcomeVideo ? `<a class="vbtn" href="${esc(CONTENT.welcomeVideo)}" target="_blank" rel="noopener"><svg viewBox="0 0 14 14"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>Vivi köszöntő videója</a>` : '<span class="vbtn off">Vivi köszöntő videója (link később)</span>'}</div>` : ''}
     ${D.g ? `<div class="dedication blk"><p>Ezt a kézikönyvet ${esc(D.g)} ajándékozta neked, szeretettel.</p>${D.gm ? `<p class="ded-msg">„${esc(D.gm)}”</p>` : ''}</div>` : ''}
     <div class="sign blk"><span><span class="muted" style="display:block;text-align:right;font-family:var(--f-accent);font-style:italic;font-size:1.15rem">Szeretettel,</span><span class="script">Vadkerti Vivi</span></span><img src="${LOGO}" alt="siker.by.design logó"></div>
   </section>`);
@@ -1801,7 +1801,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
     return page('tipus-szakralis', S.eyebrow, S.title,
       `<div class="blk">${txt(S.intro)}</div>
        <div class="blk"><h3 style="margin-bottom:8px">${esc(S.howTitle)}</h3>${list(S.how, 'pow')}</div>
-       <div class="blk warm"><h3>${esc(S.warmTitle)}</h3><p>${esc(S.warmIntro)}</p><div class="qchips">${S.warm.map(q => `<span>${esc(q)}</span>`).join('')}</div>${S.video ? `<div class="videos no-pdf" style="margin-top:14px">${vbtn(S.video, 'Szakrális ülés videó')}</div>` : ''}</div>
+       <div class="blk warm"><h3>${esc(S.warmTitle)}</h3><p>${esc(S.warmIntro)}</p><div class="qchips">${S.warm.map(q => `<span>${esc(q)}</span>`).join('')}</div>${S.video ? `<div class="videos" style="margin-top:14px">${vbtn(S.video, 'Szakrális ülés videó')}</div>` : ''}</div>
        <div class="blk"><h3 style="margin-bottom:8px">${esc(S.fourTitle)}</h3><p>${esc(S.four)}</p><div class="four">${S.fourList.map(([k, q]) => `<div><span>${esc(k)}</span><b>${esc(q)}</b></div>`).join('')}</div></div>
        ${notes.map(x => `<p class="note blk">${esc(x)}</p>`).join('')}`);
   }
@@ -1953,7 +1953,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
   const typePages = [], typeSubs = [];
   // 1. a típusod
   typePages.push(chapter('tipus', `Típus: ${R.typeInfo.name}`, 'Így működik az energiád', tc.lead,
-    `${(vid.type || DEMO) ? `<div class="videos blk no-pdf">${vbtn(vid.type, 'Energiatípus-kisfilmed')}</div>` : ''}
+    `${(vid.type || DEMO) ? `<div class="videos blk">${vbtn(vid.type, 'Energiatípus-kisfilmed')}</div>` : ''}
      ${TD.why ? `<div class="blk"><h3>Azért vagy itt</h3>${txt(TD.why)}</div>` : ph('Ide jön: miért vagy itt ezzel a típussal.')}
      ${TD.facts ? `<div class="facts3 blk">${TD.facts.map(([k, v]) => `<div><span>${esc(k)}</span><b>${esc(v)}</b></div>`).join('')}</div>` : ''}
      ${projectorSubtype()}
@@ -1965,7 +1965,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
   // 2. a siker stratégiád + megfelelő munka
   typePages.push(page('tipus-strategia', 'Siker stratégia', R.typeInfo.strategy,
     `<div class="blk">${txt(TD.strategy, 'Ide jön a stratégia lényege.')}</div>
-     ${(vid.strategy || DEMO) ? `<div class="videos blk no-pdf">${vbtn(vid.strategy, 'Siker stratégia-kisfilmed')}</div>` : ''}
+     ${(vid.strategy || DEMO) ? `<div class="videos blk">${vbtn(vid.strategy, 'Siker stratégia-kisfilmed')}</div>` : ''}
      ${TD.inform ? `<div class="blk"><h3 style="margin-bottom:8px">${esc(TD.inform.title)}</h3>${txt(TD.inform.text)}</div>` : ''}
      ${TD.example ? `<div class="blk example">${txt(TD.example)}</div>` : ''}
      ${TD.metaphor ? `<p class="quote blk" style="margin-block:18px;font-size:1.05rem">${esc(TD.metaphor)}</p>` : ''}
