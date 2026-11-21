@@ -1690,7 +1690,12 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
       return s ? `<circle cx="${x}" cy="${y}" r="14.5" fill="#26212a"/><text x="${x}" y="${y + 5.5}" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="15.5" font-weight="600" fill="#fff">${g}</text>`
         : `<text x="${x}" y="${y + 5}" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="14" fill="#8d8590">${g}</text>`; }).join('');
     const body = `<path d="M717,22 C796,22 840,84 838,170 C836,250 806,306 798,350 C850,372 936,392 966,460 C1016,590 1080,760 1132,915 C1176,1060 1160,1170 1060,1238 C960,1280 474,1280 374,1238 C274,1170 258,1060 302,915 C354,760 418,590 468,460 C498,392 584,372 636,350 C628,306 598,250 596,170 C594,84 638,22 717,22 Z" fill="#f4eff2"/>`;
-    return `<svg class="big-bg" viewBox="250 10 940 1290" role="img" aria-label="A bodygraphod">${body}${base}${act}${shapes}${nums}</svg>`;
+    // a négy változó nyila a fej mellett: bal oldalt tudattalan (piros), jobb oldalt tudatos (fekete)
+    const arrow = (x, y, dir, col) => { if (dir !== 'L' && dir !== 'R') return ''; const x1 = x, x2 = x + 52, tip = dir === 'L' ? x1 : x2, back = dir === 'L' ? x1 + 16 : x2 - 16;
+      return `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${col}" stroke-width="6" stroke-linecap="round"/><path d="M${tip} ${y} L${back} ${y - 12} L${back} ${y + 12} Z" fill="${col}"/>`; };
+    const vs = i => (vars[i] || {}).s;
+    const arrows = arrow(548, 92, vs(0), Dc) + arrow(548, 150, vs(1), Dc) + arrow(834, 92, vs(2), P) + arrow(834, 150, vs(3), P);
+    return `<svg class="big-bg" viewBox="250 10 940 1290" role="img" aria-label="A bodygraphod">${body}${base}${act}${shapes}${nums}${arrows}</svg>`;
   }
 
   // ---------- oldalak ----------
