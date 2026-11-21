@@ -211,7 +211,7 @@ textarea.journal { width: 100%; min-height: 110px; border: 1px solid var(--line)
 .plist { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; font-size: .96rem; }
 .plist li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 6px; }
 .plist.pow li::before { content: "✦"; color: var(--accent-2); font-size: .8rem; padding-top: 3px; }
-.plist.cha li::before { content: "○"; color: var(--accent); font-size: .8rem; padding-top: 3px; }
+.plist.cha li::before { content: "–"; color: var(--accent); font-weight: 600; }
 .example { background: var(--soft-2); border-radius: 14px; padding: 18px 20px; font-family: var(--f-accent); font-size: 1.15rem; line-height: 1.5; }
 .life h3 { font-size: 1.05rem; color: var(--accent); }
 .facts3.keys > div { background: var(--soft-2); }
@@ -1579,7 +1579,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
 
   // ---------- segédek a szövegekhez ----------
   const ph = t => DEMO ? `<p class="ph-text">${esc(t)}</p>` : '';
-  const txt = (v, placeholder) => v ? (Array.isArray(v) ? v : [v]).map(x => `<p>${esc(x)}</p>`).join('') : ph(placeholder);
+  const txt = (v, placeholder) => v ? (Array.isArray(v) ? v : [v]).map(x => `<p>${esc(x).replace(/\*([^*\n]+)\*/g, '<em>$1</em>')}</p>`).join('') : ph(placeholder);
   const backBtn = '';
   function practiceBlock(id, text, placeholder) {
     if (!text && !DEMO) return '';
@@ -1973,7 +1973,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
      ${(vid.strategy || DEMO) ? `<div class="videos blk">${vbtn(vid.strategy, 'Siker stratégia-kisfilmed')}</div>` : ''}
      ${TD.inform ? `<div class="blk"><h3 style="margin-bottom:8px">${esc(TD.inform.title)}</h3>${txt(TD.inform.text)}</div>` : ''}
      ${TD.example ? `<div class="blk example">${txt(TD.example)}</div>` : ''}
-     ${TD.metaphor ? `<p class="quote blk" style="margin-block:18px;font-size:1.05rem">${esc(TD.metaphor)}</p>` : ''}
+     ${TD.metaphor ? `<p class="quote blk" style="margin-block:18px;font-size:1.05rem">${esc(TD.metaphor).replace(/\n/g, '<br>')}</p>` : ''}
      ${TD.compare ? `<div class="twocol blk">${TD.compare.map(([h, l]) => `<div><h3>${esc(h)}</h3>${list(l, 'pow')}</div>`).join('')}</div>` : ''}
      ${TD.work ? `<div class="blk"><h3 style="margin-bottom:8px">${esc(TD.work.title)}</h3>${txt(TD.work.text)}</div>` : ''}`));
   typeSubs.push(['tipus-strategia', 'A siker stratégiád']);
@@ -1994,7 +1994,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
   typeSubs.push(['tipus-elet', 'Az életed kulcsterületei']);
   // 6. összegzés
   typePages.push(page('tipus-osszegzes', `${R.typeInfo.name} · összegzés`, 'Összegzés',
-    `${TD.powers ? `<div class="blk sumbox"><p class="muted" style="margin-bottom:12px">Most, hogy már ismered a stratégiád, így áll össze a kép.</p><div class="twocol"><div><h3>Szupererőid</h3>${list(TD.powers, 'pow')}</div><div><h3>Kihívásaid</h3>${list(TD.challenges || [], 'cha')}</div></div></div>` : ''}
+    `${TD.powers ? `<div class="blk sumbox"><p class="muted" style="margin-bottom:12px">Most, hogy már ismered a típusod és a stratégiád, így áll össze a kép.</p><div class="twocol"><div><h3>Szupererőid</h3>${list(TD.powers, 'pow')}</div><div><h3>Kihívásaid</h3>${list(TD.challenges || [], 'cha')}</div></div></div>` : ''}
      ${TD.questions ? `<div class="blk"><h3 style="margin-bottom:8px">Kérdések önmagadhoz</h3>${list(TD.questions, 'qs')}<textarea class="journal" data-store-text="typeNotes" style="margin-top:12px" aria-label="Jegyzeteid" placeholder="Ide írhatod a gondolataidat.">${esc(store.get('typeNotes') || '')}</textarea></div>` : ''}
      ${affirmBlock()}
      ${practiceBlock('tipus', tc.practice, 'Ide jön egy apró gyakorlat holnapra.')}`));
@@ -2085,6 +2085,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
          <div class="twocol blk flowcols"><div><h3>✦ Összhangban</h3>${list(E.on, 'pow')}</div><div><h3>↺ Kibillenve</h3>${list(E.off, 'cha')}</div></div>
          <p class="note blk"><b>Figyelj rá:</b> ${esc(X.shadow)}</p>
          <p class="blk example">${esc((on && E.tipOn) || E.tip)}</p>
+         ${c === 'sacral' && on ? `<p class="blk" style="text-align:center"><button type="button" class="chip" data-jump="tipus-szakralis">Emlékeztető: a szakrális ülés →</button></p>` : ''}
          ${on ? '' : `<div class="blk abund"><span class="eyebrow">A nyitottságod ajándéka</span><p>${esc(E.abundance)}</p></div>`}
          ${!on && !gs.length ? `<div class="blk full-open"><span class="eyebrow">Teljesen nyitott központ</span><p>${esc(CONTENT.openFull.intro)}</p><p style="margin-top:8px">${esc(CONTENT.openFull[c])}</p></div>` : ''}
          ${gs.length ? `<div class="blk"><h3 style="margin-bottom:8px">A kapuid ebben a központban</h3>${!on ? `<p class="muted small" style="margin-bottom:10px">${esc(CONTENT.openFull.anchor)}</p>` : ''}<div class="gates">${gs.map(gateCard).join('')}</div></div>` : ''}
@@ -2373,7 +2374,7 @@ function runBook(B, opts) {
       ${over ? '<p class="note" style="margin-bottom:10px">A beírt óraszámok több időt adnak ki, mint amennyit ébren vagy. Nézd át őket, vagy ez már önmagában jelzés: túl sokat vállalsz.</p>' : ''}
       <div class="alabel">Most így oszlik meg az energiád</div>${bar(pct)}<div class="alabel">Az ideális egy ${esc(B.rt.typeName)}nak</div>${bar(AUD_IDEAL)}
       <div class="alegend"><span><i class="joy"></i>Örömidő</span><span><i class="free"></i>Szabad kapacitás</span><span><i class="duty"></i>Kötelességek</span><span><i class="hate"></i>Ki nem állhatom</span></div>
-      <p class="averdict">${diff >= 0 ? `Az örömidőd ${pct.joy}%, ez eléri az ideális 35%-ot. Szép munka, vigyázz rá!` : `Az örömidőd ${pct.joy}%. Az ideálishoz még ${-diff} százalékpontnyi öröm hiányzik: melyik „ki nem állhatom” teendőt engednéd el elsőként?`}</p>`;
+      <p class="averdict">${diff >= 0 ? `Az örömidőd ${pct.joy}%, ez eléri az ideális 35%-ot. Szép munka, vigyázz rá!` : `Az örömidőd ${pct.joy}%. Az ideálishoz még ${-diff} százalékpontnyi öröm hiányzik: melyik teendőt engednéd el elsőként?`}</p>`;
   }
   document.addEventListener('input', e => {
     const k = e.target.dataset && e.target.dataset.aud;
