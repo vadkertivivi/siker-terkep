@@ -1848,10 +1848,9 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
   function waveBody() {
     const W = CONTENT.waves, mine = myWaves(), mk = mine.map(m => m[0]);
     const others = ['tribal', 'individual', 'collective'].filter(k => !mk.includes(k));
-    return `<p class="blk">${esc(W.intro)}</p>
+    return `<p class="blk">${esc(W.intro)} ${mine.length > 1 ? 'A csatornáid alapján ezek a te hullámaid:' : 'A csatornáid alapján ez a te hullámod:'}</p>
       ${mine.map(([k, c]) => waveCard(k, c, true)).join('')}
-      ${mine.filter(m => m[0] !== 'source').length > 1 ? `<p class="note blk">${esc(W.many)}</p>` : ''}
-      ${others.length ? `<div class="blk"><h3 style="margin-bottom:6px">A többi hullámfajta</h3><p class="muted" style="margin-bottom:10px">Hogy felismerd a körülötted élők hullámát is:</p><div class="wave-mini">${others.map(k => `<div>${waveSvg(k)}<b>${esc(W[k].name)}</b><small>${esc(W[k].tags)}</small></div>`).join('')}</div></div>` : ''}`;
+      ${mine.filter(m => m[0] !== 'source').length > 1 ? `<p class="note blk">${esc(W.many)}</p>` : ''}`;
   }
   // hangulatnapló: a saját hullámod rajza 14 napra
   function moodBlock() {
