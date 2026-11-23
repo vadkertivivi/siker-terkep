@@ -2034,12 +2034,12 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
          <button type="button" class="linecard" data-jump="profil-tudatos"><span class="eyebrow">Tudatos · így látod magad</span><b>${L1}. vonal</b><span>${esc(lname(L1))}</span><span class="go no-pdf">→</span></button>
          <button type="button" class="linecard" data-jump="profil-tudattalan"><span class="eyebrow">Tudattalan · így lát a világ</span><b>${L2}. vonal</b><span>${esc(lname(L2))}</span><span class="go no-pdf">→</span></button>
        </div>
-       ${PC.text ? `<div class="blk sumbox"><h3 style="margin-bottom:8px">A te kombinációd: ${R.profile}</h3><p>${esc(PC.text)}</p></div>` : ''}
+       ${PC.text ? `<div class="blk sumbox"><h3 style="margin-bottom:8px">${PC.name ? `${esc(PC.name)} (${R.profile})` : `A te kombinációd: ${R.profile}`}</h3><p>${esc(PC.text)}</p></div>` : ''}
        <p class="note blk">${esc(CONTENT.profileIntro.angle[pAngle])}</p>`));
     [[L1, 'tudatos', 'Tudatos vonalad', 'Ez az, ahogyan te magad látod magad.'], [L2, 'tudattalan', 'Tudattalan vonalad', 'Ez az, amit mások hamarabb észrevesznek benned, mint te magad.']].forEach(([n, id, eb, sub]) => {
       const X = LN[n] || {};
       profPages.push(page('profil-' + id, `${eb} · ${n}`, `${n}. vonal: ${lname(n)}`,
-        `<p class="blk muted">${esc(sub)} Más tanítók így is hívják: ${esc(X.alt || '')}.</p>
+        `<p class="blk muted">${esc(sub)}${X.alt ? ` Más nevei: ${esc(X.alt)}.` : ''}</p>
          <div class="qchips blk" style="margin-top:0">${(X.keys || []).map(k => `<span>${esc(k)}</span>`).join('')}</div>
          <div class="blk">${txt(X.text)}</div>
          ${X.note ? `<p class="note blk">${esc(X.note)}</p>` : ''}
@@ -2073,7 +2073,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
          <div><h3>Definiált <span class="muted">(konzisztens) · ${R.defined.length}</span></h3>${R.defined.length ? `<div class="qchips">${R.defined.map(c => `<button type="button" class="cjump on" data-jump="kp-${c}">${esc(fullName(c))}</button>`).join('')}</div>` : '<p class="muted">Minden központod nyitott: a környezeted tükre vagy.</p>'}</div>
          <div><h3>Nyitott <span class="muted">(változó) · ${R.open.length}</span></h3>${R.open.length ? `<div class="qchips">${R.open.map(c => `<button type="button" class="cjump" data-jump="kp-${c}">${esc(fullName(c))}</button>`).join('')}</div>` : '<p class="muted">Nincs nyitott központod.</p>'}</div>
        </div>
-       <div class="blk"><h3 style="margin-bottom:6px">Mit jelentenek a kapuk?</h3><p class="muted">Minden központban vannak kapuk. Ha egy kapu nálad aktív (beszínezett), az egy állandó energiatéma az életedben. Lehet tudatos (ezt ismered magadban) vagy tudattalan (ezt mások hamarabb észreveszik benned). Minden kapunak van egy árnyéka, amikor az energia még a félelemből, beszűkülve működik, és egy ajándéka, amikor kibontakozik.</p></div>`));
+       <div class="blk"><h3 style="margin-bottom:6px">Mit jelentenek a kapuk?</h3><p class="muted">Minden központban vannak kapuk: ezek a központokban látható számok 1-től 64-ig. Ha egy kapu nálad aktív (beszínezett), az egy állandó energiatéma az életedben. Lehet tudatos (ezt ismered magadban) vagy tudattalan (ezt mások hamarabb észreveszik benned). Minden kapunak van egy árnyéka, amikor az energia még a félelemből, beszűkülve működik, és egy ajándéka, amikor kibontakozik.</p></div>`));
     HD.CENTER_ORDER.forEach(c => {
       const on = R.defined.includes(c), X = CC[c][on ? 'defined' : 'open'], E = CX[c], gs = gatesIn(c);
       cpages.push(page('kp-' + c, `${fullName(c)} · ${on ? 'definiált (konzisztens)' : 'nyitott (változó)'}`, E.title,
