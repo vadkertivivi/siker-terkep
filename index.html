@@ -2092,7 +2092,8 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
          ${X.q ? `<div class="blk"><h3 style="margin-bottom:8px">Kérdések magadhoz</h3>${list(X.q, 'qs')}<textarea class="journal" data-store-text="cn-${c}" style="margin-top:12px" aria-label="Jegyzeteid: ${esc(fullName(c))}" placeholder="Ide írhatod a gondolataidat.">${esc(store.get('cn-' + c) || '')}</textarea></div>` : ''}`));
       csubs.push(['kp-' + c, `${fullName(c)}: ${({ head: 'Hogyan inspirálódsz?', ajna: 'Hogyan működik az elméd?', throat: 'Hogyan fejezed ki magad?', g: 'Ki vagy, és merre tartasz?', heart: 'Mitől érzed magad értékesnek?', sacral: 'Mennyi energiád van a munkához?', sp: 'Hogyan dolgozod fel az érzelmeidet?', spleen: 'Hogyan jeleznek az ösztöneid?', root: 'Hogyan kezeled a nyomást?' })[c] || E.title}`]);
     });
-    cpages[cpages.length - 1] = cpages[cpages.length - 1].replace(backBtn + '</section>', practiceBlock('kozpontok', CC.practice, '') + backBtn + '</section>');
+    // az Apró kísérlet a központok áttekintő oldalára kerül (a nyitott központokhoz kapcsolódik)
+    cpages[0] = cpages[0].replace(/<\/section>$/, practiceBlock('kozpontok', CC.practice, '') + '</section>');
     chapters.push(['kozpontok', 'Központok', 'A kilenc energiaközpontod', `${R.defined.length} definiált, ${R.open.length} nyitott központ`, cpages.join(''), csubs]);
   }
   if (R.channels.length) {
