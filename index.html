@@ -2099,7 +2099,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
   if (R.channels.length) {
     const CH = CONTENT.channels, chPages = [], chSubs = [];
     const fam = id => CH.family[CH[id][1]];
-    const sideOf = g => { const p = R.act.P.some(a => a && a.gate === g), d = R.act.D.some(a => a && a.gate === g); return p && d ? 'tudatos és tudattalan' : p ? 'tudatos' : 'tudattalan'; };
+    const sideOf = g => { const pl = s => R.act[s].map((a, i) => a && a.gate === g ? HD.PLANETS[i].name : '').filter(Boolean); const p = pl('P'), d = pl('D'); return [p.length ? 'tudatos: ' + p.join(', ') : '', d.length ? 'tudattalan: ' + d.join(', ') : ''].filter(Boolean).join(' · '); };
     const cnt = {}; R.channels.forEach(c => { const f = fam(c.id); cnt[f] = (cnt[f] || 0) + 1; });
     chPages.push(chapter('csatornak', 'Csatornák', 'A veled született erősségeid', CH.lead,
       `<div class="blk">${txt(CH.intro)}</div>
@@ -2107,7 +2107,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
        <div class="blk"><h3 style="margin-bottom:8px">A csatornák családjai</h3>${['individual', 'tribal', 'collective', 'integration'].map(f => `<div class="circ ${cnt[f] ? 'mine' : ''}"><b>${esc(CH.circuits[f][0])}</b>${cnt[f] ? `<span class="badge">nálad: ${cnt[f]}</span>` : ''}<p>${esc(CH.circuits[f][1])}</p></div>`).join('')}</div>`));
     R.channels.forEach(c => {
       const X = CH[c.id], f = fam(c.id), T = CH.types[X[2]];
-      const gs = [c.a, c.b].map(g => `<details class="ch-gate-d"><summary class="ch-gate"><span class="g-num">${g}</span><div><b>${esc((CONTENT.gates[g] || [''])[0])}${gAlt(g)}</b><small>${esc(cname(HD.GATE_CENTER[g]))} · ${sideOf(g)}</small></div><span class="more no-pdf" aria-hidden="true">Bővebben</span></summary><div class="gate ch-gate-body">${gateBody(g)}</div></details>`).join('');
+      const gs = [c.a, c.b].map(g => `<details class="ch-gate-d"><summary class="ch-gate"><span class="g-num">${g}</span><div><b>${esc((CONTENT.gates[g] || [''])[0])}${gAlt(g)}</b><small>${esc(cname(HD.GATE_CENTER[g]))} · ${esc(sideOf(g))}</small></div><span class="more no-pdf" aria-hidden="true">Bővebben</span></summary><div class="gate ch-gate-body">${gateBody(g)}</div></details>`).join('');
       const XX = CONTENT.channelX[c.id] || [[], []];
       chPages.push(page('cs-' + c.id, `Csatorna ${c.id} · ${cname(c.centers[0])} – ${cname(c.centers[1])}`, X[0],
         `${chMini(c)}<div class="blk ch-tags"><span class="tag">${esc(CH.circuits[f][0])} · ${esc(CH.sub[X[1]])}</span><span class="tag">${esc(T[0])} csatorna</span></div>
@@ -2156,7 +2156,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
          <div class="twocol blk"><div><h3 style="margin-bottom:6px">${esc(E[sd][0])}</h3><p>${esc(E[sd][1])}</p></div><div><h3 style="margin-bottom:6px">${esc(LR[0])} nyíl</h3><p>${esc(LR[1])}</p></div></div>
          <div class="blk"><h3 style="margin-bottom:8px">Tippek a mindennapokra</h3>${list(E.tips, 'pow')}</div>
          <p class="note blk">${esc(EV.note)}</p>
-         <div class="blk"><h3 style="margin-bottom:8px">Önreflexió</h3><ul class="plist qs"><li>Hol érezted magad életedben a legjobban? Mi volt közös ezekben a helyekben?</li><li>Melyik helyen fáradsz el a leggyorsabban, és mi lehet ennek az oka?</li></ul><textarea class="journal" data-store-text="envNotes" style="margin-top:12px" aria-label="Jegyzeteid a környezetedről" placeholder="Ide írhatod a gondolataidat.">${esc(store.get('envNotes') || '')}</textarea></div>
+         <div class="blk"><h3 style="margin-bottom:8px">Önreflexió</h3><ul class="plist qs"><li>Hol érezted magad életedben a legjobban? Mi volt közös ezekben a helyekben?</li><li>Milyen helyen fáradsz el a leggyorsabban, és mi lehet ennek az oka?</li></ul><textarea class="journal" data-store-text="envNotes" style="margin-top:12px" aria-label="Jegyzeteid a környezetedről" placeholder="Ide írhatod a gondolataidat.">${esc(store.get('envNotes') || '')}</textarea></div>
          ${practiceBlock('kornyezet', EV.practice, '')}`)]);
   }
 
@@ -2170,13 +2170,14 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
          <div class="blk env-card"><span class="eyebrow">A te motivációd</span><h3>${esc(M.name)} <span class="g-alt">• ${esc(M.tag.toLowerCase())}</span></h3><div style="margin-top:8px">${txt(M.text)}</div></div>
          ${LR ? `<div class="blk"><h3 style="margin-bottom:6px">${esc(LR[0])}</h3><p>${esc(LR[1])}</p></div>` : ''}<div class="blk"><h3 style="margin-bottom:6px">Az árnyékoldalad: ${esc(TM.name.toLowerCase())}</h3><p>${esc(MV.trans)}</p><p class="muted small" style="margin-top:6px">Nálad így hangzik: ${esc(MV.shadow[TK])}.</p></div>
          <div class="blk"><h3 style="margin-bottom:8px">Tippek a mindennapokra</h3>${list(M.tips, 'pow')}</div>
-         <div class="blk"><h3 style="margin-bottom:8px">Önreflexió</h3><ul class="plist qs"><li>Mikor gondolkodtam az utóbbi időben a legtisztábban? Mi indított el akkor?</li><li>Mikor hallom a fejemben az áttétel hangját, és mi segít visszatalálni?</li></ul><textarea class="journal" data-store-text="motNotes" style="margin-top:12px" aria-label="Jegyzeteid a motivációdról" placeholder="Ide írhatod a gondolataidat.">${esc(store.get('motNotes') || '')}</textarea></div>
+         <div class="blk"><h3 style="margin-bottom:8px">Önreflexió</h3><ul class="plist qs"><li>Mikor gondolkodtam az utóbbi időben a legtisztábban? Mi indított el akkor?</li><li>Mikor hallom a fejemben az árnyékoldalam hangját, és mi segít visszatalálni?</li></ul><textarea class="journal" data-store-text="motNotes" style="margin-top:12px" aria-label="Jegyzeteid a motivációdról" placeholder="Ide írhatod a gondolataidat.">${esc(store.get('motNotes') || '')}</textarea></div>
          ${practiceBlock('motivacio', MV.practice, '')}`)]);
   }
 
   // 7 napos kihívás
   const ch7 = (CONTENT.challenge[T] || []).slice();
   { const oc = HD.CENTER_ORDER.find(c => R.open.includes(c) && CONTENT.openDay[c]); if (oc && ch7.length >= 6) ch7[5] = CONTENT.openDay[oc]; }
+  { const ad = (CONTENT.authDay || {})[R.authority], at = { generator: 2, mg: 3, manifestor: 3, projector: 4 }[T]; if (ad && at != null && ch7.length > at) ch7[at] = ad; }
   const doneCount = () => Array.from({ length: 7 }, (_, i) => store.get('d' + (i + 1))).filter(Boolean).length;
   if (CONTENT.decond) {
     const DC = CONTENT.decond, openList = R.open.map(c => c === 'sp' ? 'Érzelmi Napfonat' : c === 'g' ? 'Én (G)' : cname(c));
@@ -2251,7 +2252,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
     `<section class="page chapter" id="ch-uzenet" data-flow><div class="ch-head blk" style="text-align:center"><span class="eyebrow">Személyesen</span><h2>Vivi üzenete neked</h2></div>${CONTENT.aboutThanks ? `<p class="quote blk">${esc(CONTENT.aboutThanks)}</p>` : ''}${D.m ? `<p class="quote blk">${esc(D.m)}</p>` : ''}<div class="sign blk" style="justify-content:center"><span class="script">Vivi</span></div>${backBtn}</section>`]);
 
   // önteszt
-  const QX = CONTENT.quizX, autoQuiz = { questions: [...QX.type[T], QX.aut, ...R.open.map(c => QX.centers[c])].filter(Boolean) };
+  const QX = CONTENT.quizX, autoQuiz = { questions: [...QX.type[T], (QX.autBy || {})[R.authority] || QX.aut, ...R.open.map(c => QX.centers[c])].filter(Boolean) };
   autoQuiz.bands = QX.bands.map(b => ({ ...b, min: Math.round(b.min * autoQuiz.questions.length * 5) }));
   const quiz = CONTENT.quiz[T] || autoQuiz || (DEMO ? { questions: ['Minta állítás 1 (típusra szabott kérdés helye)', 'Minta állítás 2', 'Minta állítás 3', 'Minta állítás 4', 'Minta állítás 5'], bands: [{ min: 0, title: 'Most kezdesz hazatalálni', text: 'Minta eredmény az alacsony pontsávhoz.' }, { min: 12, title: 'Már sokszor önmagad vagy', text: 'Minta eredmény a középső pontsávhoz.' }, { min: 19, title: 'Éled a dizájnodat', text: 'Minta eredmény a magas pontsávhoz.' }] } : null);
   if (quiz) chapters.push(['onteszt', 'Önteszt', 'Mennyire éled most a dizájnodat?', `${quiz.questions.length} kérdés`,
@@ -2273,7 +2274,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
       <div class="blk"><h3 style="margin-bottom:6px">Következő lépések</h3><p>Ha szeretnéd, hogy ez a kézikönyv ne csak egy jóleső felismerés maradjon, hanem a mindennapjaidban is érezd a változást, szívesen kísérlek tovább egy személyes beszélgetés keretein belül.</p></div>
       <div class="blk" style="text-align:center">${CONTENT.aboutCta ? `<a class="cta" href="${esc(CONTENT.aboutCta)}" target="_blank" rel="noopener">Időpontot foglalok</a>` : (DEMO ? '<span class="cta" style="opacity:.6">Időpontot foglalok (link később)</span>' : '')}${CONTENT.aboutEmail ? `<p class="muted" style="margin-top:12px">Írj nekem bátran: <a href="mailto:${esc(CONTENT.aboutEmail)}">${esc(CONTENT.aboutEmail)}</a></p>` : ''}</div>
       ${(CONTENT.feedback.url || DEMO) ? `<div class="blk gift-box"><span class="eyebrow">A véleményed sokat jelent</span><p>${esc(CONTENT.feedback.text)}</p>${CONTENT.feedback.url ? `<a class="cta" href="${esc(CONTENT.feedback.url)}" target="_blank" rel="noopener">Megírom a véleményem</a>` : '<span class="cta" style="opacity:.6">Megírom a véleményem (link később)</span>'}</div>` : ''}
-      <div class="blk gift-box"><span class="eyebrow">Mutasd meg</span><p>Ha megosztod a térképed egy részletét, egy kedvenc mondatodat vagy egy pillanatot a 7 napos kihívásból, jelölj meg rajta Instagramon vagy TikTokon: <b>@vadkerti.vivi</b>. Minden megosztást látok, és nagy örömmel olvasom.</p></div>
+      <div class="blk gift-box"><span class="eyebrow">Mutasd meg</span><p>Ha megosztod a térképed egy részletét, egy kedvenc mondatodat vagy egy pillanatot a 7 napos kihívásból, jelölj meg rajta Instagramon: <b>@siker.by.design</b>. Mindegyiket nagy örömmel olvasom.</p></div>
       <div class="signature blk" style="margin-top:34px"><img src="${LOGO}" alt="siker.by.design logó"><span>Siker by design © · Vadkerti Vivien</span></div><p class="small muted blk" style="text-align:center;margin-top:10px">Ez a kézikönyv személyes használatra, kifejezetten neked készült. Tartalma szerzői jogvédelem alatt áll: másolása, továbbadása és továbbértékesítése nem megengedett.</p></section>`;
   document.querySelectorAll('#book > .page:not(.cover)').forEach(pg => pg.insertAdjacentHTML('beforeend', '<div class="pgfoot no-pdf">siker.by.design · Vadkerti Vivi</div>'));
   if (DEMO) $('#demoNotice').hidden = false;
