@@ -1550,7 +1550,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
     document.title = 'Siker Térképe műhely';
     startWorkshop(); return;
   }
-  try { const r = await fetch(CONTENT_ID === 'web' ? 'content.dat' : '/_blob/' + CONTENT_ID); if (!r.ok) throw new Error(r.status); const t = await r.text(); CONTENT = t.trim()[0] === '{' ? JSON.parse(t) : unpackContent(t); }
+  try { const r = await fetch(CONTENT_ID === 'web' ? 'content.dat' : '/_blob/' + CONTENT_ID, CONTENT_ID === 'web' ? { cache: 'no-cache' } : undefined); if (!r.ok) throw new Error(r.status); const t = await r.text(); CONTENT = t.trim()[0] === '{' ? JSON.parse(t) : unpackContent(t); }
   catch (e) { $('#book').innerHTML = '<section class="page err-page"><div class="eyebrow">Siker Térkép</div><h2>Ez a kézikönyv most nem nyílik meg</h2><p class="muted">Próbáld újra pár perc múlva. Ha továbbra sem megy, írj Vivinek: vivi@vadkertivivien.com</p></section>'; document.querySelector('.bar .tools').hidden = true; return; }
   let parsed;
   const om = location.hash.match(/^#o([A-Za-z0-9_-]{16,64})$/);
