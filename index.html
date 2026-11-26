@@ -2075,13 +2075,13 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
        </div>
        <div class="blk"><h3 style="margin-bottom:6px">Mit jelentenek a kapuk?</h3><p class="muted">Minden központban vannak kapuk: ezek a központokban látható számok 1-től 64-ig. Ha egy kapu nálad aktív (beszínezett), az egy állandó energiatéma az életedben. Lehet tudatos (ezt ismered magadban) vagy tudattalan (ezt mások hamarabb észreveszik benned). Minden kapunak van egy árnyéka, amikor az energia még a félelemből, beszűkülve működik, és egy ajándéka, amikor kibontakozik.</p></div>`));
     HD.CENTER_ORDER.forEach(c => {
-      const on = R.defined.includes(c), X = CC[c][on ? 'defined' : 'open'], E = CX[c], gs = gatesIn(c);
+      const on = R.defined.includes(c), X = CC[c][on ? 'defined' : 'open'], E = CX[c], gs = gatesIn(c), TV = CONTENT.throatVia || {}, thr = R.channels.filter(h => h.centers.includes('throat')).map(h => h.centers.find(x => x !== 'throat')).filter((x, i, a) => TV[x] && a.indexOf(x) === i);
       cpages.push(page('kp-' + c, `${fullName(c)} · ${on ? 'definiált (konzisztens)' : 'nyitott (változó)'}`, E.title,
         `<div class="blk c-intro ${on ? 'on' : ''}"><span class="state ${on ? 'on' : 'off'}">${on ? 'definiált' : 'nyitott'}</span><small class="muted">${esc(CC[c].essence)} · ${esc(CC[c].role)}</small></div>
-         <div class="blk"><p>${esc(X.text)}</p></div>
+         <div class="blk"><p>${esc(X.text)}${c === 'ajna' && on && thr.includes('ajna') ? ` Mivel az Ajnád a Torokhoz kapcsolódik, ${esc(TV.ajna[1])}.` : ''}</p>${c === 'throat' && on && thr.length ? (thr.length === 1 ? `<p style="margin-top:8px">Nálad ${esc(TV[thr[0]][0])} kapcsolódik a Torokhoz, ezért ${esc(TV[thr[0]][1])}.</p>` : `<p style="margin-top:8px">Nálad több központ is kapcsolódik a Torokhoz:</p><ul class="plist">${thr.map(x => `<li><b>${esc(TV[x][0].replace(/^(az?) /, '').replace(/^./, m => m.toUpperCase()))}</b>: ${esc(TV[x][1])}.</li>`).join('')}</ul>`) : ''}</div>
          ${CONTENT.aware[c] ? `<p class="blk aware-note"><b>Tudatosság központ.</b> A három tudatosság központ (lép, ajna, érzelmi napfonat) mindegyike a félelemből tanul: itt ${CONTENT.aware[c]} jelentkezik. A félelem nem ellenség. Amikor észreveszed, szembenézel vele, és a stratégiád és az autoritásod szerint lépsz tovább, akkor tudatossággá alakul.</p>` : ''}
          ${on ? '' : `<p class="cq blk">${esc(X.question)}<small>a nyitott ${esc(fullName(c))} árnyéktémája</small></p>`}
-         <div class="twocol blk flowcols"><div><h3>✦ Összhangban</h3>${list(E.on, 'pow')}</div><div><h3>↺ Kibillenve</h3>${list(E.off, 'cha')}</div></div>
+         <div class="twocol blk flowcols"><div><h3>✦ Összhangban</h3>${list(E.on, 'pow')}</div><div><h3>↺ Kibillenve</h3>${list((on && E.offOn) || E.off, 'cha')}</div></div>
          <p class="note blk"><b>Figyelj rá:</b> ${esc(X.shadow)}</p>
          <p class="blk example">${esc((on && E.tipOn) || E.tip)}</p>
          ${c === 'sacral' && on ? `<p class="blk" style="text-align:center"><button type="button" class="chip" data-jump="tipus-szakralis">Emlékeztető: a szakrális ülés →</button></p>` : ''}
@@ -2104,7 +2104,7 @@ const SAMPLE = { v: 1, id: 'minta', cx: 'A Szeretet Edényének Jobb Szögű Ker
     chPages.push(chapter('csatornak', 'Csatornák', 'A veled született erősségeid', CH.lead,
       `<div class="blk">${txt(CH.intro)}</div>
        <div class="blk ch-list">${R.channels.map(c => `<button type="button" class="ch-row" data-jump="cs-${c.id}"><span class="ch-id">${c.id}</span><span><b>${esc(CH[c.id][0])}</b><small>${esc(CH.circuits[fam(c.id)][0])} · ${esc(CH.types[CH[c.id][2]][0])}</small></span><span class="go no-pdf">→</span></button>`).join('')}</div>
-       <div class="blk"><h3 style="margin-bottom:8px">A csatornák családjai</h3>${['individual', 'tribal', 'collective', 'integration'].map(f => `<div class="circ ${cnt[f] ? 'mine' : ''}"><b>${esc(CH.circuits[f][0])}</b>${cnt[f] ? `<span class="badge">nálad: ${cnt[f]}</span>` : ''}<p>${esc(CH.circuits[f][1])}</p></div>`).join('')}</div>`));
+       <div class="blk"><h3 style="margin-bottom:8px">A csatornák családjai</h3>${['individual', 'tribal', 'collective', 'integration'].map(f => `<div class="circ ${'mine'}"><b>${esc(CH.circuits[f][0])}</b><span class="badge">nálad: ${cnt[f] || 0}</span><p>${esc(CH.circuits[f][1])}</p></div>`).join('')}</div>`));
     R.channels.forEach(c => {
       const X = CH[c.id], f = fam(c.id), T = CH.types[X[2]];
       const gs = [c.a, c.b].map(g => `<details class="ch-gate-d"><summary class="ch-gate"><span class="g-num">${g}</span><div><b>${esc((CONTENT.gates[g] || [''])[0])}${gAlt(g)}</b><small>${esc(cname(HD.GATE_CENTER[g]))} · ${esc(sideOf(g))}</small></div><span class="more no-pdf" aria-hidden="true">Bővebben</span></summary><div class="gate ch-gate-body">${gateBody(g)}</div></details>`).join('');
